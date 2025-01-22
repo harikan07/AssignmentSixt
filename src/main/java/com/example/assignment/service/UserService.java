@@ -22,6 +22,9 @@ public class UserService {
     @Autowired
     private BlogRepository blogRepository;
 
+    @Autowired
+    private BlogService blogService;
+
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -60,10 +63,10 @@ public class UserService {
         return null;
     }
 
-    public List<Blog> getALLBlogsOfUser(UUID userid){
-        Optional<User> user = userRepository.findById(userid);
-        if(user.isPresent()){
-            return new ArrayList<>(user.get().getBlogs());
+    public List<Blog> getALLBlogsOfUser(UUID userid,int page){
+        Optional<User> optionalUser = userRepository.findById(userid);
+        if(optionalUser.isPresent()){
+            return blogService.getBlogsForUser(userid,page);
         }
         return null;
     }

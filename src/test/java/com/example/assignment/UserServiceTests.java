@@ -4,6 +4,7 @@ import com.example.assignment.model.Blog;
 import com.example.assignment.model.User;
 import com.example.assignment.repository.BlogRepository;
 import com.example.assignment.repository.UserRepository;
+import com.example.assignment.service.BlogService;
 import com.example.assignment.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ public class UserServiceTests {
 
     @Mock
     BlogRepository blogRepository;
+
+    @Mock
+    BlogService blogService;
 
     @InjectMocks
     UserService userService;
@@ -78,14 +82,16 @@ public class UserServiceTests {
         user.addBlog(blog2);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(blogService.getBlogsForUser(userId,0)).thenReturn(List.of(blog1,blog2));
 
-        List<Blog> result = userService.getALLBlogsOfUser(userId);
+        List<Blog> result = userService.getALLBlogsOfUser(userId,0);
 
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains(blog1));
         assertTrue(result.contains(blog2));
         verify(userRepository).findById(userId);
+        verify(blogService).getBlogsForUser(userId, 0);
     }
 
     //edge case when the user is not found to retrieve blogs
@@ -95,7 +101,7 @@ public class UserServiceTests {
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        List<Blog> result = userService.getALLBlogsOfUser(userId);
+        List<Blog> result = userService.getALLBlogsOfUser(userId,0);
 
         assertNull(result);
     }

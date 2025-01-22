@@ -50,10 +50,10 @@ public class UserController {
         return userService.addBlog(userid,blog);
     }
 
-    //endpoint to retrive blogs of each user
+    //endpoint to retrieve blogs of each user
     @GetMapping("/{userid}/blogs")
-    public List<Blog> getAllBlogsOfUser(@PathVariable UUID userid){
-        return userService.getALLBlogsOfUser(userid);
+    public List<Blog> getAllBlogsOfUser(@PathVariable UUID userid, @RequestParam(defaultValue = "0") int page){
+        return userService.getALLBlogsOfUser(userid,page);
     }
 
     //endpoint to update blog of each user
